@@ -6,10 +6,11 @@ import API from "../utils/API";
 class SearchResultContainer extends Component {
   state = {
     search: "",
+    sortby: "lastname",
     results: []
   };
 
-  // When this component mounts, search the Random User API for 200 Users
+  // When this component mounts, search the Random User API for 20 Users
   componentDidMount() {
     this.searchUsers("");
   }
@@ -21,11 +22,22 @@ class SearchResultContainer extends Component {
   };
 
   handleInputChange = event => {
-    const name = event.target.name;
-    const value = event.target.value;
-    this.setState({
-      [name]: value
-    });
+    const name = event.target.id;
+    if (name === "both"){
+      this.setState({search: ""});
+    }
+    if (name === "male"){
+      this.setState({search: "&gender=male"});
+    }
+    if (name === "female"){
+      this.setState({search: "&gender=female"});
+    }
+    if (name === "firstname"){
+      this.setState({sortby: "firstname"});
+    }
+    if (name === "lastname"){
+      this.setState({sortby: "lastname"});
+    }
   };
 
   // When the form is submitted, search the Random User API for `this.state.search`
@@ -35,15 +47,15 @@ class SearchResultContainer extends Component {
   };
 
   render() {
-    console.log(this.state.result);
     return (
       <div>
         <SearchForm
           search={this.state.search}
+          sortby={this.state.sortby}
           handleFormSubmit={this.handleFormSubmit}
           handleInputChange={this.handleInputChange}
         />
-        <ResultList results={this.state.results} />
+        <ResultList sortby={this.state.sortby} results={this.state.results} />
       </div>
     );
   }
